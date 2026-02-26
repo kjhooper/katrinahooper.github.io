@@ -1,6 +1,6 @@
 # katrinahooper.github.io
 
-Personal portfolio and project showcase, hosted via GitHub Pages at [katrinahooper.github.io](https://katrinahooper.github.io).
+Personal portfolio and project showcase, hosted via GitHub Pages at [kjhooper.github.io](https://kjhooper.github.io).
 
 ## About
 
