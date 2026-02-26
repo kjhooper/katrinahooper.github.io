@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Katrina Hooper — Data &amp; ML Engineer</title>
+  <title>Quay Tools</title>
+  <meta name="description" content="Open-source Python tools for maritime logistics and urban transit — live risk dashboards, cargo optimisation engines, and production-ready data pipelines." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -11,35 +12,65 @@
 </head>
 <body>
 
+  <!-- ── Top Nav ───────────────────────────────────────────── -->
+  <nav class="topnav">
+    <div class="container nav-inner">
+      <a class="nav-brand" href="/">Quay Tools</a>
+      <a class="btn btn-nav" href="https://github.com/kjhooper" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </nav>
+
   <!-- ── Hero ──────────────────────────────────────────────── -->
   <header class="hero">
     <div class="hero-overlay"></div>
     <div class="container hero-content">
-      <p class="hero-eyebrow">Data &amp; ML Engineering</p>
-      <h1 class="hero-name">Katrina Hooper</h1>
+      <p class="hero-eyebrow">Open Source &nbsp;·&nbsp; Python &nbsp;·&nbsp; Maritime &amp; Transit</p>
+      <h1 class="hero-name">Data tools for<br/>the real economy.</h1>
       <p class="hero-desc">
-        Building end-to-end data systems for shipping logistics and transit &mdash;
-        live risk dashboards, optimisation engines, and open-source ingestion tools.
+        Quay Tools is a collection of open-source Python tools for maritime logistics
+        and urban transit &mdash; built for engineers who work with messy real-world data.
+        Live risk dashboards, cargo optimisation engines, and production-ready ingestion pipelines.
       </p>
-      <nav class="social-links">
-        <a href="https://github.com/kjhooper" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://linkedin.com/in/katrinahooper" target="_blank" rel="noopener">LinkedIn</a>
-      </nav>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#tools">Explore Tools</a>
+        <a class="btn btn-ghost" href="https://github.com/kjhooper" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
     </div>
   </header>
 
-  <!-- ── Projects ──────────────────────────────────────────── -->
-  <main class="container">
+  <!-- ── Feature Strip ─────────────────────────────────────── -->
+  <section class="features">
+    <div class="container features-grid">
+      <div class="feature">
+        <div class="feature-icon">&#9432;</div>
+        <h3>Live Intelligence</h3>
+        <p>Pulls from Open-Meteo, NOAA NDBC, and Toronto Open Data in real time — no manual data wrangling required.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#9651;</div>
+        <h3>Real Constraints</h3>
+        <p>Optimisation engines and ML pipelines grounded in physical and operational realities, not toy benchmarks.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#9670;</div>
+        <h3>Open Source</h3>
+        <p>Every tool is free, documented, and built for production. Drop it into your pipeline or run the live demo.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- 01 · Predictive Models -->
+  <!-- ── Tools ─────────────────────────────────────────────── -->
+  <main id="tools" class="container">
+
+    <!-- 01 · Risk Intelligence -->
     <section class="category">
       <div class="category-top">
         <span class="category-num">01</span>
         <div>
-          <span class="category-label category-forecast">Predictive Models</span>
+          <span class="category-label category-forecast">Risk Intelligence</span>
           <p class="category-desc">
-            End-to-end ML pipelines that ingest live data, build features,
-            and produce calibrated risk scores and forecasts.
+            Live data pipelines that ingest weather and marine feeds, score disruption
+            risk, and surface actionable signals before conditions deteriorate.
           </p>
         </div>
       </div>
@@ -47,13 +78,13 @@
 
         <article class="card card-forecast">
           <div class="card-header">
-            <h3>Port Disruption Risk Predictor</h3>
+            <h3>Harbinger</h3>
             <span class="status-badge status-live">Live</span>
           </div>
           <p class="card-description">
-            72-hour weather-driven disruption risk scorer for major shipping ports (Rotterdam,
-            Houston, Singapore). Pulls live data from Open-Meteo and NOAA, runs automated
-            quality checks, and surfaces risk signals in an interactive Streamlit dashboard.
+            72-hour weather-driven disruption risk scorer for major global shipping ports.
+            Tracks Rotterdam, Houston, and Singapore using live Open-Meteo and NOAA feeds,
+            runs automated quality checks, and surfaces risk signals in an interactive dashboard.
           </p>
           <div class="tags">
             <span class="tag">Python</span>
@@ -72,15 +103,15 @@
       </div>
     </section>
 
-    <!-- 02 · Algorithms & Simulation -->
+    <!-- 02 · Optimisation -->
     <section class="category">
       <div class="category-top">
         <span class="category-num">02</span>
         <div>
-          <span class="category-label category-solver">Algorithms &amp; Simulation</span>
+          <span class="category-label category-solver">Optimisation</span>
           <p class="category-desc">
-            Optimisation algorithms and physics-grounded simulations
-            with interactive visualisations.
+            Physics-grounded algorithms that solve hard combinatorial problems
+            under real operational constraints, with visualisations you can actually run.
           </p>
         </div>
       </div>
@@ -88,14 +119,14 @@
 
         <article class="card card-solver">
           <div class="card-header">
-            <h3>Cargo Ship Loader</h3>
+            <h3>Manifest</h3>
             <span class="status-badge status-live">Live</span>
           </div>
           <p class="card-description">
-            Five-solver optimisation engine for loading 20&nbsp;ft and 40&nbsp;ft ISO containers
-            into a Panamax-class hull. Greedy baseline, beam search, simulated annealing,
-            Bayesian-optimised weights, and a neural position ranker &mdash; all compared
-            on port/starboard and fore/aft balance.
+            Five-solver engine for loading 20&nbsp;ft and 40&nbsp;ft ISO containers into a
+            Panamax-class hull. Greedy baseline, beam search, simulated annealing,
+            Bayesian-optimised scoring weights, and a neural position ranker &mdash;
+            all benchmarked on port/starboard and fore/aft balance.
           </p>
           <div class="tags">
             <span class="tag">Python</span>
@@ -115,15 +146,15 @@
       </div>
     </section>
 
-    <!-- 03 · Libraries & Tools -->
+    <!-- 03 · Data Infrastructure -->
     <section class="category">
       <div class="category-top">
         <span class="category-num">03</span>
         <div>
-          <span class="category-label category-library">Quay Tools</span>
+          <span class="category-label category-library">Data Infrastructure</span>
           <p class="category-desc">
-            An open-source Python toolkit for urban data pipelines &mdash; reusable,
-            production-ready packages that plug straight into any analytics or ML workflow.
+            Quay Tools core libraries &mdash; reusable ingestion and pipeline components
+            that plug straight into any analytics or ML workflow.
           </p>
         </div>
       </div>
@@ -135,10 +166,10 @@
             <span class="status-badge status-package">Package</span>
           </div>
           <p class="card-description">
-            Reusable Python library for ingesting any Toronto Open Data (CKAN) package into
-            PostgreSQL. Powers the TTC delay prediction pipeline. Supports replace and append
+            Ingest any Toronto Open Data (CKAN) package into PostgreSQL in one call.
+            Handles both datastore-backed and raw file resources, supports replace and append
             modes with optional deduplication, and integrates with Supabase for zero-config
-            database hosting.
+            database hosting. Powers the TTC delay prediction pipeline.
           </p>
           <div class="tags">
             <span class="tag">Python</span>
@@ -157,12 +188,12 @@
 
   </main>
 
+  <!-- ── Footer ────────────────────────────────────────────── -->
   <footer>
     <div class="container footer-inner">
-      <p>&copy; 2026 Katrina Hooper</p>
+      <p>Built by <a href="https://linkedin.com/in/katrinahooper" target="_blank" rel="noopener">Katrina Hooper</a></p>
       <nav class="footer-links">
         <a href="https://github.com/kjhooper" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://linkedin.com/in/katrinahooper" target="_blank" rel="noopener">LinkedIn</a>
       </nav>
     </div>
   </footer>
