@@ -7,20 +7,30 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
   <header>
     <div class="container">
-      <h1>Katrina Hooper</h1>
-      <p class="tagline">Data &amp; ML Engineer &mdash; Python, shipping logistics, transit analytics</p>
-      <nav class="social-links">
-        <a href="https://github.com/kjhooper" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://linkedin.com/in/katrinahooper" target="_blank" rel="noopener">LinkedIn</a>
-      </nav>
+      <div class="header-inner">
+        <div>
+          <h1>Katrina Hooper</h1>
+          <p class="tagline">Data &amp; ML Engineer &mdash; Python, shipping logistics, transit analytics</p>
+        </div>
+        <nav class="social-links">
+          <a href="https://github.com/kjhooper" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/katrinahooper" target="_blank" rel="noopener">LinkedIn</a>
+        </nav>
+      </div>
     </div>
   </header>
 
   <main class="container">
-    <section id="projects">
-      <h2>Projects</h2>
+
+    <!-- ── Predictive Models ───────────────────────────── -->
+    <section class="category">
+      <div class="category-label category-forecast">Predictive Models</div>
+      <p class="category-desc">
+        End-to-end ML pipelines that ingest live data, build features, and produce calibrated risk scores or forecasts.
+      </p>
       <div class="project-grid">
 
         <article class="card">
@@ -30,8 +40,8 @@
           </div>
           <p class="card-description">
             72-hour weather-driven disruption risk scorer for major shipping ports (Rotterdam,
-            Houston, Singapore). Pulls live data from Open-Meteo and NOAA, runs quality checks,
-            and surfaces risk signals in an interactive Streamlit dashboard.
+            Houston, Singapore). Pulls live data from Open-Meteo and NOAA, runs automated
+            quality checks, and surfaces risk signals in an interactive Streamlit dashboard.
           </p>
           <div class="tags">
             <span class="tag">Python</span>
@@ -47,6 +57,17 @@
           </div>
         </article>
 
+      </div>
+    </section>
+
+    <!-- ── Algorithms & Simulation ────────────────────── -->
+    <section class="category">
+      <div class="category-label category-solver">Algorithms &amp; Simulation</div>
+      <p class="category-desc">
+        Optimisation algorithms and physics-grounded simulations with interactive visualisations.
+      </p>
+      <div class="project-grid">
+
         <article class="card">
           <div class="card-header">
             <h3>Cargo Ship Loader</h3>
@@ -55,7 +76,8 @@
           <p class="card-description">
             Greedy optimisation algorithm for loading 20ft and 40ft ISO containers into a
             Panamax-class ship's hull. Minimises centre-of-gravity shift and maximises
-            port/starboard balance. Includes a 3D animated visualisation of the loading sequence.
+            port/starboard and fore/aft balance. Includes an animated visualisation of the
+            loading sequence.
           </p>
           <div class="tags">
             <span class="tag">Python</span>
@@ -70,13 +92,24 @@
           </div>
         </article>
 
+      </div>
+    </section>
+
+    <!-- ── Libraries & Tools ──────────────────────────── -->
+    <section class="category">
+      <div class="category-label category-library">Libraries &amp; Tools</div>
+      <p class="category-desc">
+        Reusable open-source Python packages built for production data pipelines.
+      </p>
+      <div class="project-grid">
+
         <article class="card">
           <div class="card-header">
             <h3>Toronto OD Data Ingestor</h3>
-            <span class="status-badge status-library">Library</span>
+            <span class="status-badge status-library">Package</span>
           </div>
           <p class="card-description">
-            Reusable Python module for ingesting any Toronto Open Data (CKAN) package into
+            Reusable Python library for ingesting any Toronto Open Data (CKAN) package into
             PostgreSQL. Powers the TTC delay prediction pipeline. Supports replace and append
             modes with optional deduplication, and integrates with Supabase for zero-config
             database hosting.
@@ -95,6 +128,7 @@
 
       </div>
     </section>
+
   </main>
 
   <footer>
@@ -102,5 +136,6 @@
       <p>&copy; 2026 Katrina Hooper</p>
     </div>
   </footer>
+
 </body>
 </html>
