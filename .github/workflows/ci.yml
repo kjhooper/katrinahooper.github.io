@@ -30,6 +30,5 @@ jobs:
         with:
           args: >
             --no-progress
-            --exclude-mail
             index.html
           fail: true
