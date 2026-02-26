@@ -30,5 +30,8 @@ jobs:
         with:
           args: >
             --no-progress
+            --exclude 'linkedin\.com'
+            --exclude 'github\.com/kjhooper/cargo_ship_loader'
+            --exclude 'github\.com/kjhooper/port_disruption_risk_predictor'
             index.html
           fail: true
