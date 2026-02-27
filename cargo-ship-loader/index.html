@@ -202,6 +202,51 @@
       padding: 2.5rem 0 3rem;
     }
 
+    /* ── Case study extras ───────────────────────────────────── */
+    .case-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+    .case-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .case-fit   { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+    .case-vol   { background: rgba(96,165,250,0.12); color: var(--blue);  border: 1px solid rgba(96,165,250,0.3); }
+    .case-wt    { background: rgba(251,146,60,0.12);  color: var(--orange);border: 1px solid rgba(251,146,60,0.3); }
+
+    .insight-box {
+      margin: 1.5rem 0 0;
+      padding: 0.9rem 1.1rem;
+      border-left: 3px solid var(--gold);
+      background: rgba(234,179,8,0.06);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .insight-box strong { color: var(--text); }
+
+    .score-best { color: var(--green) !important; font-weight: 700; }
+    .score-warn { color: #f87171 !important; }
+
+    .solver-tag {
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      vertical-align: middle;
+      margin-left: 0.3rem;
+    }
+
     @media (max-width: 700px) {
       .demo-header h1 { font-size: 1.5rem; }
       .gif-grid.two-col { grid-template-columns: 1fr; }
@@ -223,13 +268,16 @@
       <h1>Manifest</h1>
       <p>
         A physics-grounded optimisation engine for packing 20&nbsp;ft and 40&nbsp;ft ISO
-        containers into a Panamax-class hull. Five solver strategies &mdash; from a greedy
-        baseline to Bayesian-optimised weights and a neural position ranker &mdash; all
-        competing on the same balance metric.
+        containers into a configurable cargo hull &mdash; Coastal Feeder, Handymax, or
+        Panamax. Six solver strategies, from a greedy baseline to an RL&ndash;Bayesian
+        hybrid, all competing on the same four-axis balance metric under a hard weight
+        constraint.
       </p>
       <div class="tags">
         <span class="tag">Python</span>
         <span class="tag">NumPy</span>
+        <span class="tag">Streamlit</span>
+        <span class="tag">Plotly</span>
         <span class="tag">Matplotlib</span>
         <span class="tag">Beam Search</span>
         <span class="tag">Simulated Annealing</span>
@@ -243,10 +291,12 @@
     <section class="demo-section">
       <h2>Hull Geometry</h2>
       <p class="section-desc">
-        The ship is modelled as a 36&times;13&times;9 voxel grid. The hull widens tier by
-        tier from a 7-column keel up to a 13-column beam, matching real Panamax geometry.
-        Hull cells (shown transparent) are never valid placements; the solver only places
-        containers into the coloured valid cells.
+        Ships are modelled as 3-D voxel grids. The hull widens tier by tier from a narrow
+        keel up to full beam &mdash; matching real cargo-hold geometry. Three pre-built
+        classes are available (Coastal Feeder 12&times;9&times;5, Handymax 24&times;11&times;7,
+        Panamax 36&times;13&times;9) alongside a fully custom configurator. Hull cells are
+        never valid placements, and a hard weight limit rejects any container that would
+        push the ship over its maximum cargo capacity.
       </p>
       <figure class="hull-wrap">
         <img src="hull.png" alt="3-D voxel render of an empty Panamax cargo hold. Tiers are coloured from dark blue at the keel to light yellow at the deck, and the hull narrows toward the bottom." />
@@ -254,120 +304,227 @@
       </figure>
     </section>
 
-    <!-- ── Loading animation ─────────────────────────────── -->
+    <!-- ── Case 1: Well-fitted ───────────────────────────────── -->
     <section class="demo-section">
-      <h2>Loading Sequence</h2>
-      <p class="section-desc">
-        Containers are placed one at a time, heaviest first. Each placement is scored
-        on four criteria: metacentric stability (centre-of-gravity height), fore&ndash;aft
-        balance, port&ndash;starboard balance, and diagonal balance. The live bars on the
-        right turn green when the ship is within 10&nbsp;% of perfect balance on each axis.
-      </p>
-      <div class="gif-grid">
-        <div class="gif-card">
-          <img src="loading-greedy.gif" alt="Animation of 28 ISO shipping containers being loaded one by one into a Panamax hull. Containers are colour-coded from blue (light) to red (heavy). Balance bars on the right show near-perfect port-starboard and fore-aft equilibrium." />
-          <div class="gif-caption">
-            <strong>Greedy solver &mdash; 28 containers (20&times;20&nbsp;ft + 8&times;40&nbsp;ft)</strong>
-            <p>
-              Heaviest-first ordering. Each container is placed at the position that
-              maximises a weighted balance score. Final ratios: PS&nbsp;0.998 &nbsp;/&nbsp; FA&nbsp;0.992.
-            </p>
-          </div>
-        </div>
+      <div class="case-label">
+        <span class="case-num case-fit">Case 1</span>
+        <span style="font-size:0.8rem;color:var(--muted);">Well-fitted manifest &mdash; no constraints binding</span>
       </div>
-    </section>
-
-    <!-- ── Solver comparison ─────────────────────────────── -->
-    <section class="demo-section">
-      <h2>Solver Comparison</h2>
+      <h2>All Containers Fit, Weight Well Under Limit</h2>
       <p class="section-desc">
-        The same 28-container manifest loaded by two solvers simultaneously. Beam Search
-        (K&nbsp;=&nbsp;5) maintains five candidate loading sequences in parallel at each
-        step and commits to the five best-scoring placements, trading speed for a broader
-        search of the solution space.
-      </p>
-      <div class="gif-grid">
-        <div class="gif-card">
-          <img src="comparison.gif" alt="Side-by-side animation comparing the greedy solver (left) and beam search solver with K equals 5 (right) loading the same 28 containers. Both achieve near-identical balance bar readings." />
-          <div class="gif-caption">
-            <strong>Greedy vs Beam Search (K&nbsp;=&nbsp;5) &mdash; same manifest, same seed</strong>
-            <p>
-              On a well-structured manifest, both solvers converge to near-identical balance.
-              Beam Search yields larger improvements on adversarial orderings or denser loads
-              where greedy is more likely to make locally optimal but globally suboptimal choices.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Benchmark ─────────────────────────────────────── -->
-    <section class="demo-section">
-      <h2>Balance Benchmark</h2>
-      <p class="section-desc">
-        Port&ndash;starboard and fore&ndash;aft balance ratios (min&nbsp;/&nbsp;max weight on each axis;
-        1.000&nbsp;=&nbsp;perfect) across five random seeds. Full manifest: 60&times;20&nbsp;ft
-        + 25&times;40&nbsp;ft containers. Runtime is for all five seeds combined.
+        Panamax hull (36&times;13&times;9), loaded with 60&times;20&nbsp;ft and 25&times;40&nbsp;ft
+        containers weighing 2,000&ndash;28,000&nbsp;kg each. Total manifest weight: 1,219&nbsp;t
+        against a 3,000&nbsp;t cap. All 85 containers are placed by every solver &mdash; the
+        only competition is balance quality.
       </p>
       <div class="bench-wrap">
         <table class="bench-table">
           <thead>
-            <tr>
-              <th>Solver</th>
-              <th>seed&nbsp;42</th>
-              <th>seed&nbsp;99</th>
-              <th>seed&nbsp;7</th>
-              <th>seed&nbsp;1234</th>
-              <th>seed&nbsp;5678</th>
-              <th>Mean</th>
-              <th>Time&nbsp;(5&nbsp;seeds)</th>
-            </tr>
+            <tr><th>Solver</th><th>Type</th><th>Placed</th><th>PS</th><th>FA</th><th>Diag</th><th>Final</th><th>Time</th></tr>
           </thead>
           <tbody>
             <tr>
-              <td>Greedy</td>
-              <td class="score-cell score-high">0.997&nbsp;/&nbsp;0.996</td>
-              <td class="score-cell score-high">0.999&nbsp;/&nbsp;0.996</td>
-              <td class="score-cell score-high">0.997&nbsp;/&nbsp;0.995</td>
-              <td class="score-cell score-high">0.996&nbsp;/&nbsp;0.997</td>
-              <td class="score-cell score-high">0.997&nbsp;/&nbsp;0.998</td>
-              <td class="score-mean">0.998&nbsp;/&nbsp;0.996</td>
-              <td class="time-cell">6.6&nbsp;s</td>
+              <td>Greedy</td><td class="time-cell">Heuristic</td><td>85 / 85</td>
+              <td class="score-cell score-high">0.9974</td><td class="score-cell score-high">0.9957</td><td class="score-cell score-high">0.9975</td>
+              <td class="score-cell score-high">0.9969</td><td class="time-cell">1.4&nbsp;s</td>
             </tr>
             <tr>
-              <td>Beam Search&nbsp;K&nbsp;=&nbsp;5</td>
-              <td class="score-cell score-high">0.997&nbsp;/&nbsp;0.996</td>
-              <td class="score-cell score-high">0.997&nbsp;/&nbsp;0.999</td>
-              <td class="score-cell score-high">0.997&nbsp;/&nbsp;0.995</td>
-              <td class="score-cell score-high">0.994&nbsp;/&nbsp;1.000</td>
-              <td class="score-cell score-high">0.998&nbsp;/&nbsp;0.998</td>
-              <td class="score-mean">0.996&nbsp;/&nbsp;0.998</td>
-              <td class="time-cell">33&nbsp;s</td>
+              <td>Beam Search&nbsp;K=5</td><td class="time-cell">Heuristic</td><td>85 / 85</td>
+              <td class="score-cell score-high">0.9972</td><td class="score-cell score-high">0.9963</td><td class="score-cell score-high">0.9976</td>
+              <td class="score-cell score-high">0.9970</td><td class="time-cell">6.9&nbsp;s</td>
             </tr>
             <tr>
-              <td>Simulated Annealing</td>
-              <td class="score-cell score-high">0.997&nbsp;/&nbsp;0.996</td>
-              <td class="score-cell score-high">0.997&nbsp;/&nbsp;1.000</td>
-              <td class="score-cell score-high">0.995&nbsp;/&nbsp;0.998</td>
-              <td class="score-cell score-high">0.996&nbsp;/&nbsp;0.997</td>
-              <td class="score-cell score-high">0.997&nbsp;/&nbsp;0.998</td>
-              <td class="score-mean">0.997&nbsp;/&nbsp;0.998</td>
-              <td class="time-cell">171&nbsp;s</td>
+              <td>Simulated Annealing</td><td class="time-cell">Heuristic</td><td>85 / 85</td>
+              <td class="score-cell score-high">0.9974</td><td class="score-cell score-high">0.9957</td><td class="score-cell score-high">0.9975</td>
+              <td class="score-cell score-high">0.9969</td><td class="time-cell">34&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Bayesian Opt</td><td class="time-cell">ML</td><td>85 / 85</td>
+              <td class="score-cell score-high">0.9985</td><td class="score-cell score-high">0.9966</td><td class="score-cell score-high">0.9981</td>
+              <td class="score-best">0.9977</td><td class="time-cell">42&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Neural Ranker</td><td class="time-cell">ML</td><td>85 / 85</td>
+              <td class="score-cell score-high">0.9990</td><td class="score-warn">0.9634</td><td class="score-cell score-high">0.9964</td>
+              <td class="score-warn">0.9863</td><td class="time-cell">2.3&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>RL Bayesian</td><td class="time-cell">ML</td><td>85 / 85</td>
+              <td class="score-cell score-high">0.9972</td><td class="score-cell score-high">0.9965</td><td class="score-cell score-high">0.9973</td>
+              <td class="score-cell score-high">0.9970</td><td class="time-cell">1.4&nbsp;s</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p style="margin-top:0.75rem; font-size:0.8rem; color:var(--subtle);">
-        PS&nbsp;/&nbsp;FA = port&ndash;starboard ratio / fore&ndash;aft ratio. All three solvers
-        achieve &gt;&nbsp;99.5&nbsp;% mean balance. The greedy solver reaches this in a
-        fraction of the time because the hand-tuned scoring function already captures the
-        key physics. Beam Search and SA add the most value on harder, adversarial manifests.
+      <div class="insight-box">
+        <strong>Key insight:</strong> When no constraints bind, all heuristic solvers score above 0.996.
+        Bayesian Opt edges ahead by tuning scorer weights to this specific manifest. The Neural Ranker
+        achieves the best port&ndash;starboard ratio (0.999) but sacrifices fore&ndash;aft balance
+        (0.963), dragging its overall score down.
+      </div>
+      <div class="gif-grid" style="margin-top:1.5rem;">
+        <div class="gif-card">
+          <img src="case1-comparison.gif" alt="Side-by-side animation: Greedy (left) vs Bayesian Opt (right) loading 28 containers into a Panamax hull. Both achieve near-perfect balance bar readings." />
+          <div class="gif-caption">
+            <strong>Greedy vs Bayesian Opt &mdash; Panamax, 28 containers, seed 42</strong>
+            <p>Bayesian Opt tunes the five scorer weights before loading, finding a coefficient set
+            that edges ahead on all three balance axes. The difference is small here &mdash; Case 3
+            shows where it matters most.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Case 2: All containers fit ────────────────────────── -->
+    <section class="demo-section">
+      <div class="case-label">
+        <span class="case-num case-vol">Case 2</span>
+        <span style="font-size:0.8rem;color:var(--muted);">Large manifest &mdash; every container loads, weight irrelevant</span>
+      </div>
+      <h2>120 Containers, Any Selection Fits</h2>
+      <p class="section-desc">
+        Coastal Feeder hull (12&times;9&times;5) &mdash; a compact ship with a proportionally
+        smaller hold. Manifest: 120&times;20&nbsp;ft containers, 1,000&ndash;5,000&nbsp;kg each,
+        total weight 352&nbsp;t. The weight cap is set high enough that it never comes into play
+        regardless of which containers are chosen. All 120 are placed by every solver; the
+        question is purely one of balance precision on a tighter geometry.
       </p>
+      <div class="bench-wrap">
+        <table class="bench-table">
+          <thead>
+            <tr><th>Solver</th><th>Type</th><th>Placed</th><th>PS</th><th>FA</th><th>Diag</th><th>Final</th><th>Time</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Greedy</td><td class="time-cell">Heuristic</td><td>120 / 120</td>
+              <td class="score-cell score-high">0.9981</td><td class="score-cell score-high">0.9994</td><td class="score-cell score-high">0.9995</td>
+              <td class="score-cell score-high">0.9990</td><td class="time-cell">0.3&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Beam Search&nbsp;K=5</td><td class="time-cell">Heuristic</td><td>120 / 120</td>
+              <td class="score-cell score-high">0.9988</td><td class="score-cell score-high">0.9995</td><td class="score-best">1.0000</td>
+              <td class="score-cell score-high">0.9994</td><td class="time-cell">1.3&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Simulated Annealing</td><td class="time-cell">Heuristic</td><td>120 / 120</td>
+              <td class="score-cell score-high">0.9981</td><td class="score-cell score-high">0.9994</td><td class="score-cell score-high">0.9995</td>
+              <td class="score-cell score-high">0.9990</td><td class="time-cell">4.6&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Bayesian Opt</td><td class="time-cell">ML</td><td>120 / 120</td>
+              <td class="score-cell score-high">0.9998</td><td class="score-cell score-high">0.9999</td><td class="score-cell score-high">0.9997</td>
+              <td class="score-best">0.9998</td><td class="time-cell">8.1&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Neural Ranker</td><td class="time-cell">ML</td><td>120 / 120</td>
+              <td class="score-warn">0.8596</td><td class="score-warn">0.9169</td><td class="score-cell score-high">0.9933</td>
+              <td class="score-warn">0.9233</td><td class="time-cell">0.7&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>RL Bayesian</td><td class="time-cell">ML</td><td>120 / 120</td>
+              <td class="score-cell score-high">0.9994</td><td class="score-best">1.0000</td><td class="score-cell score-high">0.9999</td>
+              <td class="score-best">0.9998</td><td class="time-cell">0.3&nbsp;s</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight-box">
+        <strong>Key insight:</strong> RL Bayesian matches Bayesian Opt at 0.9998 in 0.3&nbsp;s vs 8.1&nbsp;s
+        &mdash; the pre-trained model predicts near-optimal scorer weights instantly. Neural Ranker
+        struggles badly on the Coastal Feeder (PS 0.860, FA 0.917): it was trained via behavioural
+        cloning on Panamax-class data and the compact hull geometry creates a distribution shift.
+      </div>
+      <div class="gif-grid" style="margin-top:1.5rem;">
+        <div class="gif-card">
+          <img src="case2-comparison.gif" alt="Side-by-side animation: Greedy (left) vs RL Bayesian (right) loading 120 containers into a Coastal Feeder hull. RL Bayesian achieves near-perfect balance bars." />
+          <div class="gif-caption">
+            <strong>Greedy vs RL Bayesian &mdash; Coastal Feeder, 120 containers, seed 42</strong>
+            <p>RL Bayesian predicts Bayesian-optimised scorer weights from manifest statistics in a
+            single forward pass &mdash; reaching the same final score as the full 30-trial search
+            at a fraction of the runtime.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Case 3: Weight-constrained ────────────────────────── -->
+    <section class="demo-section">
+      <div class="case-label">
+        <span class="case-num case-wt">Case 3</span>
+        <span style="font-size:0.8rem;color:var(--muted);">Weight-constrained &mdash; 54 containers must stay on the dock</span>
+      </div>
+      <h2>Heavy Manifest Exceeds Weight Cap</h2>
+      <p class="section-desc">
+        Same Panamax hull and 85-container manifest, but containers are heavy
+        (10,000&ndash;30,000&nbsp;kg each) and the weight limit is cut to 800&nbsp;t.
+        Every solver places exactly 31 containers &mdash; the ship hits its weight cap well
+        before the hold fills up. The algorithms now compete on how well-balanced those
+        31 containers are, given that they must reject 54 others.
+      </p>
+      <div class="bench-wrap">
+        <table class="bench-table">
+          <thead>
+            <tr><th>Solver</th><th>Type</th><th>Placed</th><th>PS</th><th>FA</th><th>Diag</th><th>Final</th><th>Time</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Greedy</td><td class="time-cell">Heuristic</td><td>31 / 85</td>
+              <td class="score-cell">0.9458</td><td class="score-cell">0.9440</td><td class="score-cell">0.9457</td>
+              <td class="score-cell">0.9451</td><td class="time-cell">0.5&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Beam Search&nbsp;K=5</td><td class="time-cell">Heuristic</td><td>31 / 85</td>
+              <td class="score-cell">0.9457</td><td class="score-cell">0.9444</td><td class="score-cell">0.9454</td>
+              <td class="score-cell">0.9452</td><td class="time-cell">2.5&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Simulated Annealing</td><td class="time-cell">Heuristic</td><td>31 / 85</td>
+              <td class="score-best">0.9815</td><td class="score-best">0.9722</td><td class="score-best">0.9914</td>
+              <td class="score-best">0.9817</td><td class="time-cell">34&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Bayesian Opt</td><td class="time-cell">ML</td><td>31 / 85</td>
+              <td class="score-cell">0.9460</td><td class="score-cell">0.9460</td><td class="score-cell">0.9479</td>
+              <td class="score-cell">0.9466</td><td class="time-cell">16&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>Neural Ranker</td><td class="time-cell">ML</td><td>31 / 85</td>
+              <td class="score-warn">0.9356</td><td class="score-cell">0.9446</td><td class="score-cell">0.9414</td>
+              <td class="score-warn">0.9405</td><td class="time-cell">0.9&nbsp;s</td>
+            </tr>
+            <tr>
+              <td>RL Bayesian</td><td class="time-cell">ML</td><td>31 / 85</td>
+              <td class="score-cell">0.9454</td><td class="score-cell">0.9462</td><td class="score-cell">0.9446</td>
+              <td class="score-cell">0.9454</td><td class="time-cell">0.5&nbsp;s</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight-box">
+        <strong>Key insight:</strong> Simulated Annealing is the clear winner here (0.9817 vs 0.9451&ndash;0.9466
+        for everything else). SA warm-starts from the greedy solution and iteratively relocates
+        &ldquo;top&rdquo; containers &mdash; exactly the kind of post-placement refinement needed
+        when the weight cap forces a sparse, difficult-to-balance arrangement. Bayesian Opt tunes
+        scorer weights but cannot relocate containers after placement, so it converges near Greedy.
+        The weight-constrained regime is where meta-heuristic search earns its runtime cost.
+      </div>
+      <div class="gif-grid" style="margin-top:1.5rem;">
+        <div class="gif-card">
+          <img src="case3-comparison.gif" alt="Side-by-side animation: Greedy (left) vs Simulated Annealing (right) loading 28 heavy containers into a Panamax hull under a tight weight cap. Simulated Annealing shows noticeably better balance bar readings." />
+          <div class="gif-caption">
+            <strong>Greedy vs Simulated Annealing &mdash; Panamax, 28 heavy containers, 800&nbsp;t cap</strong>
+            <p>SA warm-starts from the greedy solution then iteratively swaps container positions
+            to improve balance. With a tight weight limit, greedy&rsquo;s first-pass placement
+            cannot recover from early imbalances &mdash; SA&rsquo;s refinement step makes all
+            the difference.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ── Solvers ────────────────────────────────────────── -->
     <section class="demo-section">
-      <h2>The Five Solvers</h2>
+      <h2>The Six Solvers</h2>
       <p class="section-desc">
         All solvers share the same <code>BaseSolver</code> interface and report a unified
         <code>final_score()</code> metric, making them drop-in replacements for one another.
@@ -428,6 +585,18 @@
             hidden units). Trained via behavioural cloning from Beam Search: for each
             placement decision, it learns which of the valid positions the best beam would
             have chosen.
+          </p>
+        </div>
+        <div class="solver-card">
+          <div class="solver-name">
+            RL Bayesian
+            <span class="solver-type type-ml">ML</span>
+          </div>
+          <p>
+            Predicts the optimal CargoLoader scoring weights directly from manifest
+            statistics using an MLP pre-trained on BayesOpt solutions (imitation learning),
+            then fine-tuned via reward-weighted regression with sequential importance
+            resampling. Near-instantaneous at inference.
           </p>
         </div>
       </div>
