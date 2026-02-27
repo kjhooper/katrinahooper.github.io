@@ -33,5 +33,6 @@ jobs:
             --exclude 'linkedin\.com'
             --exclude 'github\.com/kjhooper/cargo_ship_loader'
             --exclude 'github\.com/kjhooper/port_disruption_risk_predictor'
+            --exclude 'streamlit\.app'
             index.html
           fail: true
