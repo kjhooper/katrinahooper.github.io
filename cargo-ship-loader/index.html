@@ -233,6 +233,28 @@
     }
     .insight-box strong { color: var(--text); }
 
+    .constraint-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 0.85rem;
+      margin-top: 1.25rem;
+    }
+    .constraint-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .constraint-card strong {
+      display: block;
+      color: var(--text);
+      font-size: 0.875rem;
+      margin-bottom: 0.2rem;
+    }
+
     .score-best { color: var(--green) !important; font-weight: 700; }
     .score-warn { color: #f87171 !important; }
 
@@ -302,6 +324,49 @@
         <img src="hull.png" alt="3-D voxel render of an empty Panamax cargo hold. Tiers are coloured from dark blue at the keel to light yellow at the deck, and the hull narrows toward the bottom." />
         <figcaption>Panamax hull &mdash; 36 bays &times; 13 columns &times; 9 tiers &mdash; colour-coded by tier (keel &rarr; deck).</figcaption>
       </figure>
+    </section>
+
+    <!-- ── Problem Constraints ──────────────────────────────── -->
+    <section class="demo-section">
+      <h2>Problem Constraints</h2>
+      <p class="section-desc">
+        Naive placement fails because every decision is coupled to physical and
+        operational rules. These five constraints interact, turning the loading
+        problem into a hard combinatorial search.
+      </p>
+      <div class="constraint-grid">
+        <div class="constraint-card">
+          <strong>40 ft bay parity</strong>
+          A 40&nbsp;ft container spans two TEU slots and must be placed at an even
+          bay position &mdash; odd bays are invalid placements.
+        </div>
+        <div class="constraint-card">
+          <strong>20 ft sub-slot choice</strong>
+          A 20&nbsp;ft container must choose both a bay and a slot within it
+          (forward or aft half), so even an empty bay presents a binary
+          sub-decision at every step.
+        </div>
+        <div class="constraint-card">
+          <strong>Hard weight cap</strong>
+          Each hull class has a maximum cargo tonnage. Any container that would
+          push the ship over that limit is rejected outright &mdash; not deferred
+          or reordered.
+        </div>
+        <div class="constraint-card">
+          <strong>Hold capacity</strong>
+          The voxel grid has a finite number of valid cells. Once a column's
+          stack reaches the deck, no further stacking is allowed regardless of
+          remaining weight budget.
+        </div>
+        <div class="constraint-card">
+          <strong>Metacentric stability</strong>
+          Cargo placement directly affects the ship's centre of gravity. A high
+          or laterally offset CoG reduces the metacentric height (GM), risking
+          capsize in adverse conditions. The four-axis balance metric
+          (port&ndash;starboard, fore&ndash;aft, diagonal, vertical CoG) proxies
+          the real physics.
+        </div>
+      </div>
     </section>
 
     <!-- ── Case 1: Well-fitted ───────────────────────────────── -->

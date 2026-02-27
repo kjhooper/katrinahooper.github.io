@@ -390,6 +390,7 @@ main { padding: 5rem 0 6rem; }
 .status-live    { background: rgba(100,217,138,0.1); color: var(--green);          border: 1px solid rgba(100,217,138,0.28); }
 .status-package { background: var(--cat-library-bg); color: var(--cat-library);    border: 1px solid var(--cat-library-border); }
 .status-wip     { background: var(--gold-soft);      color: var(--gold);           border: 1px solid var(--gold-border); }
+.status-partial { background: var(--cat-solver-bg);  color: var(--cat-solver);     border: 1px solid var(--cat-solver-border); }
 
 /* ── Tags ──────────────────────────────────────────────────── */
 .tags {
